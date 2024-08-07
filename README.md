@@ -70,11 +70,11 @@ The more you do requests, the more methods will appear.
 When you emplement any class, it will inherits from the root-endpoint and thus already have available methods.
 
 ```ruby
-slimpay = Slimpay::Base.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
+slimpay = SlimpayClient::Base.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
 slimpay.api_methods
 ```
 
-⚠️ If you call ``Slimpay::Base.new`` without arguments, the _Sandbox_ credentials will be used.
+⚠️ If you call ``SlimpayClient::Base.new`` without arguments, the _Sandbox_ credentials will be used.
 
 Result will be a Hash:
 
@@ -163,14 +163,14 @@ _Base_ defines root methods according to the Slimpay API.
 The official API method:
 
 ```ruby
-orders = Slimpay::Order.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
+orders = SlimpayClient::Order.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
 orders.get_orders({creditorReference: 'mysellername', reference: 1234})
 ```
 
 The shortcut:
 
 ```ruby
-orders = Slimpay::Order.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
+orders = SlimpayClient::Order.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
 orders.get_one(1234)
 ```
 
