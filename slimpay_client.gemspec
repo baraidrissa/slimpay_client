@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/baraidrissa/slimpay_client"
-  spec.metadata["changelog_uri"] = "https://github.com/baraidrissa/slimpay_client/CHANGELOG.md"
+  spec.metadata["changelog_uri"] = "https://github.com/baraidrissa/slimpay_client/blob/main/CHANGELOG.md"
 
   spec.post_install_message = %(Please refer to Slimpay's API https://dev.slimpay.com for more informations.)
 
