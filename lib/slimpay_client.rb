@@ -5,6 +5,8 @@ require 'oauth2'
 require 'httparty'
 
 require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/object/blank'
+
 
 require 'slimpay_client/configuration'
 require 'slimpay_client/error'
