@@ -32,11 +32,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'activesupport'
-  spec.add_dependency 'httparty', '~> 0.22.0'
+  spec.add_dependency 'httparty', '~> 0.23.1'
   spec.add_dependency 'oauth2', '~> 2.0', '>= 2.0.9'
-
-  spec.add_development_dependency 'bundler', '~> 2.5', '>= 2.5.17'
-  spec.add_development_dependency 'rake', '~> 13.2', '>= 13.2.1'
+  spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'rake', '~> 13.3'
   spec.add_development_dependency 'rspec', '~> 3.13'
   spec.add_development_dependency 'rubocop', '~> 1.65', '>= 1.65.1'
   spec.add_development_dependency 'vcr', '~> 6.2'
