@@ -1,5 +1,9 @@
 ## [unrelease]
 
+## [1.1.3] - 2026-03-31
+* update gem dependency
+** 'httparty', '~> 0.24.2'
+
 ## [1.1.0] - 2025-07-15
 
 * release task
