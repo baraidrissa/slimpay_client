@@ -12,10 +12,11 @@ Gem::Specification.new do |spec|
   spec.description = "Ruby library for Slimpay's API."
   spec.homepage = "https://github.com/baraidrissa/slimpay_client"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/baraidrissa/slimpay_client"
+  spec.metadata["rubygems_mfa_required"] = "true"
   spec.metadata["changelog_uri"] = "https://github.com/baraidrissa/slimpay_client/blob/main/CHANGELOG.md"
 
   spec.post_install_message = %(Please refer to Slimpay's API https://dev.slimpay.com for more informations.)
@@ -31,15 +32,15 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'activesupport'
-  spec.add_dependency 'httparty', '~> 0.24.2'
-  spec.add_dependency 'oauth2', '~> 2.0', '>= 2.0.9'
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake', '~> 13.3'
-  spec.add_development_dependency 'rspec', '~> 3.13'
-  spec.add_development_dependency 'rubocop', '~> 1.65', '>= 1.65.1'
-  spec.add_development_dependency 'vcr', '~> 6.2'
-  spec.add_development_dependency 'webmock', '~> 3.23', '>= 3.23.1'
+  spec.add_dependency "activesupport", ">= 7.0", "< 9"
+  spec.add_dependency "httparty", "~> 0.24", ">= 0.24.3"
+  spec.add_dependency "oauth2", "~> 2.0", ">= 2.0.12"
+  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "rake", "~> 13.4"
+  spec.add_development_dependency "rspec", "~> 3.13"
+  spec.add_development_dependency "rubocop", "~> 1.92"
+  spec.add_development_dependency "vcr", "~> 6.4"
+  spec.add_development_dependency "webmock", "~> 3.36"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

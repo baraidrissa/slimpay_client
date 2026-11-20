@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SlimpayClient
   # An abstract resource to be inherited from.
   #
@@ -21,9 +23,7 @@ module SlimpayClient
     #   reference: (String)
     def get_one(reference = 1)
       url = "#{@endpoint}/creditors/#{@creditor_reference}/#{@resource_name}/#{reference}"
-      response = HTTParty.get(url, headers: options)
-      generate_api_methods(JSON.parse(response.body))
-      SlimpayClient.answer(response)
+      get_resource(url)
     end
   end
 end

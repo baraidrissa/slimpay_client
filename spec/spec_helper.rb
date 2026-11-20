@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
 require "slimpay_client"
-Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
-require 'vcr'
+Dir["./spec/support/**/*.rb"].each { |f| require f }
+require "vcr"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -17,9 +18,8 @@ RSpec.configure do |config|
   end
 end
 
-
 VCR.configure do |config|
-  config.cassette_library_dir = 'spec/support/cassettes'
+  config.cassette_library_dir = "spec/support/cassettes"
   config.hook_into :webmock
   config.allow_http_connections_when_no_cassette = false
   config.ignore_localhost = true
