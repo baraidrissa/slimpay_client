@@ -1,21 +1,14 @@
-module SlimpayClient
-  # An abstract CardAlias to be inherited from.
-  #
-  # Defines API CardAlias non-semantic methods.
-  class RecurrentCardTransaction < Resource
-    def initialize
-      @resource_name = self.class.to_s.demodulize.underscore.dasherize.pluralize
-      super
-    end
+# frozen_string_literal: true
 
+module SlimpayClient
+  # Defines API RecurrentCardTransaction methods.
+  class RecurrentCardTransaction < Resource
     def get_one(id = 1)
       url = "#{@endpoint}/recurrent_card_transaction/#{id}"
-      response = HTTParty.get(url, headers: options)
-      generate_api_methods(JSON.parse(response.body))
-      SlimpayClient.answer(response)
+      get_resource(url)
     end
 
-    def cancel(id = 'card-transac-1')
+    def cancel(id = "card-transac-1")
       url = "recurrent-card-transactions/#{id}/cancellation"
       body_options = {}
       response = HTTParty.post("#{@endpoint}/#{url}", body: body_options.to_json, headers: options)

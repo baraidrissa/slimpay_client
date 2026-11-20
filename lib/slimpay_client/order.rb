@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module SlimpayClient
-  # Inherits from Resouce and thus defines its associated resource's methods.
+  # Inherits from Resource and thus defines its associated resource's methods.
   #
   # Defines shortcut methods for the create_order method with various arguments.
   class Order < Resource
@@ -32,8 +34,8 @@ module SlimpayClient
     end
 
     # POST
-    def login(reference = 'subscriber01')
-      url = 'orders'
+    def login(reference = "subscriber01")
+      url = "orders"
       body_options = {
         creditor: {
           reference: @creditor_reference
@@ -43,7 +45,7 @@ module SlimpayClient
         },
         items: [
           {
-            type: 'subscriberLogin'
+            type: "subscriberLogin"
           }
         ],
         started: true
@@ -58,12 +60,13 @@ module SlimpayClient
     # In case of success, this will generate a method accessible via the _.api_methods_ method.
     # This method let you redirect the customer to the approval page : orders.api_methods['user_approval']
     # ===== Arguments
-    #   reference: (String) The reference to your User in your application. Use a unique key. SlimpayClient will refer to it for future answers.
+    #   reference: (String) The reference to your User in your application. Use a unique key.
+    #              Slimpay will refer to it for future answers.
     #   signatory: (Hash) Your customer informations. See API Order documentation for details.
     # ===== Returns
     #   a Hash representing the Mandate.
-    def sign_mandate(reference = 'subscriber01', signatory = default_signatory)
-      url = 'orders'
+    def sign_mandate(reference = "subscriber01", signatory = default_signatory)
+      url = "orders"
       body_options = {
         creditor: {
           reference: @creditor_reference
@@ -73,9 +76,9 @@ module SlimpayClient
         },
         items: [
           {
-            type: 'signMandate',
+            type: "signMandate",
             mandate: {
-              standard: 'SEPA',
+              standard: "SEPA",
               signatory: signatory
             }
           }
@@ -90,17 +93,17 @@ module SlimpayClient
 
     def default_signatory
       {
-        honorificPrefix: 'Mr',
-        familyName: 'Doe',
-        givenName: 'John',
-        telephone: '+33612345678',
-        email: 'john.doe@gmail.com',
+        honorificPrefix: "Mr",
+        familyName: "Doe",
+        givenName: "John",
+        telephone: "+33612345678",
+        email: "john.doe@gmail.com",
         billingAddress: {
-          street1: '27 rue des fleurs',
-          street2: 'Bat 2',
-          postalCode: '75008',
-          city: 'Paris',
-          country: 'FR'
+          street1: "27 rue des fleurs",
+          street2: "Bat 2",
+          postalCode: "75008",
+          city: "Paris",
+          country: "FR"
         }
       }
     end

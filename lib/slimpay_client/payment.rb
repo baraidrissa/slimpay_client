@@ -1,30 +1,21 @@
-module SlimpayClient
-  # An abstract Payment to be inherited from.
-  #
-  # Defines API Payment non-semantic methods.
-  class Payment < Resource
-    def initialize
-      @resource_name = self.class.to_s.demodulize.underscore.dasherize.pluralize
-      super
-    end
+# frozen_string_literal: true
 
+module SlimpayClient
+  # Defines API Payment methods.
+  class Payment < Resource
     def get_one(id = 1)
       url = "#{@endpoint}/payments/#{id}"
-      response = HTTParty.get(url, headers: options)
-      generate_api_methods(JSON.parse(response.body))
-      SlimpayClient.answer(response)
+      get_resource(url)
     end
 
     def issues(id = 1)
       url = "#{@endpoint}/payments/#{id}/issues"
-      response = HTTParty.get(url, headers: options)
-      generate_api_methods(JSON.parse(response.body))
-      SlimpayClient.answer(response)
+      get_resource(url)
     end
 
     def refund(id, amount)
       url = "payments/#{id}/refund"
-      body_options = {amount: amount}
+      body_options = { amount: amount }
       response = HTTParty.post("#{@endpoint}/#{url}", body: body_options.to_json, headers: options)
       follow_up_api(response)
     end

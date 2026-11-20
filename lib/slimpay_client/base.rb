@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module SlimpayClient
   # Defines constants, main variables, requests options.
   #
   # Connect to the API through OAuth2 and generates API's first resources GET methods.
   # ===== Usage:
-  #   slimpay = SlimpayClient::Base.new(client_id = '1234', client_secret = '987654321', creditor_reference = 'azerty')
+  #   slimpay = SlimpayClient::Base.new
   #   slimpay.api_methods
   #   =>
   #     { "post_token"=>"https://api-sandbox.slimpay.net/oauth/token",
@@ -21,10 +23,7 @@ module SlimpayClient
   #       "get_card_transaction_issues"=>"https://api-sandbox.slimpay.net/card-transaction-issues{?id}",
   #       "profile"=>"https://api-sandbox.slimpay.net/alps/v1"}
   #
-  # ===== Arguments
-  #   client_id: (String)
-  #   client_secret: (String)
-  #   creditor_reference: (String)
+  # Credentials and URLs are read from SlimpayClient.configuration (see SlimpayClient.configure).
   class Base
     def initialize
       init_config
@@ -38,15 +37,17 @@ module SlimpayClient
     # It will also create new methods from future answers.
     def generate_api_methods(response)
       methods = {}
-      links = response['_links']
-      links = links.merge(response['_embedded']['items'].first['_links']) if response['_embedded'] && response['_embedded']['items']
+      links = response["_links"]
+      if response["_embedded"] && response["_embedded"]["items"]
+        links = links.merge(response["_embedded"]["items"].first["_links"])
+      end
       return if links.nil?
 
       links.each do |k, v|
-        name = k.gsub('https://api.slimpay.net/alps#', '').underscore
-        next if @methods && @methods.keys.include?(name) && !k.eql?('self')
+        name = k.gsub("https://api.slimpay.net/alps#", "").underscore
+        next if @methods && @methods.keys.include?(name) && !k.eql?("self")
 
-        url = v['href']
+        url = v["href"]
         api_args = url.scan(/{\?(.*),?}/).flatten.first
 
         methods[name] = generate_method(name, url, api_args)
@@ -68,19 +69,20 @@ module SlimpayClient
       @return_url = SlimpayClient.configuration.return_url
       @notify_url = SlimpayClient.configuration.notify_url
       @endpoint = sandbox? ? SANDBOX_ENDPOINT : PRODUCTION_ENDPOINT
-      @token_endpoint = @endpoint# + '/oauth/token'
+      @token_endpoint = @endpoint
     end
 
     # A request call to the endpoint.
     # An empty call will return list of available methods in the API.
-    def request_to_api(url = '')
+    def request_to_api(url = "")
       response = HTTParty.get("#{@endpoint}/#{url}", headers: options)
       SlimpayClient.answer response
     end
 
     # OAuth2 call to retrieve the token
     def connect_api_with_oauth
-      client = OAuth2::Client.new(@client_id, @client_secret, site: @token_endpoint, headers: oauth_options, auth_scheme: :basic_auth)
+      client = OAuth2::Client.new(@client_id, @client_secret, site: @token_endpoint, headers: oauth_options,
+                                                              auth_scheme: :basic_auth)
       response = client.client_credentials.get_token
       @token = response.token
     end
@@ -90,9 +92,9 @@ module SlimpayClient
     #   url: (String) URL called in the method block
     #   api_args: (String) API arguments for this URL.
     def generate_method(name, url, api_args)
-      if name.start_with?('create', 'post', 'cancel')
+      if name.start_with?("create", "post", "cancel")
         generate_post_method(name, url)
-      elsif name.start_with?('patch')
+      elsif name.start_with?("patch")
         generate_patch_method(name, url)
       else
         generate_get_method(name, url, api_args)
@@ -105,7 +107,7 @@ module SlimpayClient
         if api_args.nil?
           response = HTTParty.get(url, headers: options)
         else
-          clean_url = url.gsub(/{\?.*/, '')
+          clean_url = url.gsub(/{\?.*/, "")
           url_args = format_html_arguments(api_args, method_arguments)
           response = HTTParty.get("#{clean_url}?#{url_args}", headers: options)
         end
@@ -132,14 +134,13 @@ module SlimpayClient
     #   api_args: (String) SlimpayClient given argument within URLs. Formated like: ?{arg1, arg2}
     #   method_arguments: (String) Arguments called on the currently defined method.
     def format_html_arguments(api_args, method_arguments)
-      url_args = ''
-      api_args.split(',').each_with_index do |arg, index|
-        if method_arguments[arg.to_sym].to_s.present?
-          url_args += "#{arg}=#{method_arguments[arg.to_sym]}"
-          url_args += '&' if (index + 1) < api_args.size
-        end
+      return "" if method_arguments.blank?
+
+      params = api_args.split(",").each_with_object({}) do |arg, query|
+        value = method_arguments[arg.to_sym]
+        query[arg] = value if value.to_s.present?
       end
-      url_args
+      URI.encode_www_form(params)
     end
 
     # Create the 'api_methods' instance method to retrieve an array of API methods previously created.
@@ -150,10 +151,18 @@ module SlimpayClient
     #   => [apps, creditors, direct_debits, mandates, orders, recurrent_direct_debits, subscribers, ...]
     def list_api_methods(methods)
       @methods ||= methods
-      self.class.send(:define_method, 'api_methods') do
+      self.class.send(:define_method, "api_methods") do
         @methods = @methods.merge(methods) if @methods != methods
         @methods
       end
+    end
+
+    # GET a resource by its full URL, raise on API errors and generate methods from the returned links.
+    def get_resource(url)
+      response = HTTParty.get(url, headers: options)
+      answer = SlimpayClient.answer(response)
+      generate_api_methods(JSON.parse(answer)) if answer.is_a?(String)
+      answer
     end
 
     # Catch up potential errors and generate new methods if needed.
@@ -165,19 +174,19 @@ module SlimpayClient
 
     def oauth_options
       {
-        'Accept' => 'application/json',
-        'Content-type' => 'application/x-www-form-urlencoded',
-        'grant_type' => 'client_credentials',
-        'scope' => 'api'
+        "Accept" => "application/json",
+        "Content-type" => "application/x-www-form-urlencoded",
+        "grant_type" => "client_credentials",
+        "scope" => "api"
       }
     end
 
     def options
-      {'Authorization' => "Bearer #{@token}", 'Content-type' => 'application/json'}
+      { "Authorization" => "Bearer #{@token}", "Content-type" => "application/json" }
     end
 
     def sandbox?
-      @sandbox || @client_id.eql?('democreditor01') ? true : false
+      @sandbox || @client_id.eql?(SANDBOX_CLIENT_ID) ? true : false
     end
   end
 end
