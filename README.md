@@ -1,6 +1,6 @@
 # SlimpayClient
 
-Welcome to your new gem!
+[![CI](https://github.com/baraidrissa/slimpay_client/actions/workflows/ci.yml/badge.svg)](https://github.com/baraidrissa/slimpay_client/actions/workflows/ci.yml)
 
 SlimpayClient is a Ruby gem designed to provide a comprehensive and up-to-date interface for interacting with the Slimpay API. This gem extends the original \`slimpay\` gem created by gdurelle, addressing the need for maintenance and updates to ensure compatibility with the latest Slimpay API features and best practices.
 

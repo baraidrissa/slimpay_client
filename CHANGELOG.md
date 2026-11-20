@@ -8,6 +8,7 @@
 * rubocop autocorrect
 * gemspec: `required_ruby_version >= 3.2`, `activesupport >= 7.0, < 9`, `httparty >= 0.24.3`, `oauth2 >= 2.0.12`, updated dev dependencies
 * CI on Ruby 3.4
+* GitHub Actions CI (RSpec on Ruby 3.2/3.3/3.4, RuboCop, gem build) and Dependabot
 
 ## [1.1.3] - 2026-03-31
 * update gem dependency
